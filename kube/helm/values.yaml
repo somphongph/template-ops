@@ -1,7 +1,7 @@
 info:
-  namespace: prod-xxx
-  name: xxx-api
-  image: ghcr.io/xxx/xxx-api
+  namespace: prod-template
+  name: template-api
+  image: ghcr.io/template/template-api
   tag: v1.0.0
   imagePullSecrets: dockerconfigjson-github-com
   replicas: 1
@@ -15,7 +15,8 @@ resources:
     memory: 128Mi
     cpu: 500m
 ingress:
-  host: api.xxx.com
-  path: "/xxx(/|$)(.*)"
+  host: api.template.com
+  path: "/template(/|$)(.*)"
+  certManager: letsencrypt-template
 extraEnv:
   SERVICE_VERSION: v2

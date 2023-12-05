@@ -1,11 +1,14 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  name: {{ .Values.info.namespace }}--{{ .Values.info.name }}
+  namespace: {{ .Values.info.namespace }}
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /$2
-  name: {{ .Values.info.namespace }}--{{ .Values.info.name }}
-  namespace: {{ .Values.info.namespace }}
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.certManager }}
 spec:
   rules:
     - host: {{ .Values.ingress.host }} 
