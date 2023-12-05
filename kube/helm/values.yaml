@@ -1,0 +1,21 @@
+info:
+  namespace: prod-xxx
+  name: xxx-api
+  image: ghcr.io/xxx/xxx-api
+  tag: v1.0.0
+  imagePullSecrets: dockerconfigjson-github-com
+  replicas: 1
+  port: 80
+  healthCheckPath: "/health"
+resources:
+  requests:
+    memory: 64Mi
+    cpu: 250m
+  limits:
+    memory: 128Mi
+    cpu: 500m
+ingress:
+  host: api.xxx.com
+  path: "/xxx(/|$)(.*)"
+extraEnv:
+  SERVICE_VERSION: v2

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.info.namespace }}--{{ .Values.info.name }}
+  namespace: {{ .Values.info.namespace }}  
+  labels:
+    app: {{ .Values.info.namespace }}--{{ .Values.info.name }}
+spec:
+  replicas: {{ .Values.info.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.info.namespace }}--{{ .Values.info.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.info.namespace }}--{{ .Values.info.name }}
+    spec:
+      containers:
+        - name: {{ .Values.info.namespace }}--{{ .Values.info.name }}
+          image: {{ .Values.info.image }}:{{ .Values.info.tag }}
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: {{ .Values.resources.requests.memory }}
+              cpu:  {{ .Values.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+              cpu:  {{ .Values.resources.limits.cpu }}
+          ports:
+            - containerPort: {{ .Values.info.port }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.info.healthCheckPath }}
+              port: {{ .Values.info.port }}
+              scheme: HTTP
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.info.healthCheckPath }}
+              port: {{ .Values.info.port }}
+              scheme: HTTP
+          {{- if .Values.extraEnv }}
+          env:
+          {{- range $key, $value := .Values.extraEnv }}
+          - name: {{ $key }}
+            value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+      imagePullSecrets:
+        - name: {{ .Values.info.imagePullSecrets }} 
